@@ -1,7 +1,11 @@
 cmake_minimum_required(VERSION 3.0)
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "../cmake/")
+
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake/")
 
 find_package(SQLite3 REQUIRED)
+
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
 
 add_library(${PROJECT_NAME} SHARED sqlite3pp.cpp)
 target_link_libraries(${PROJECT_NAME} ${SQLITE3_LIBRARIES})
