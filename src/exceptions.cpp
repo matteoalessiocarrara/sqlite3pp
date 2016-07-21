@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA 02110-1301, USA.
  */
-
 # include <sqlite3.h>
 
 # include "sqlite3pp.hpp"
@@ -117,7 +116,7 @@ sqlite3pp::throwException(int errorCode)
 
 		case SQLITE_WARNING:
 			throw exceptions::primary::SqliteWarning(sqlite3_errstr(SQLITE_WARNING));
-			
+
 		case SQLITE_ABORT_ROLLBACK:
 			throw exceptions::extended::SqliteAbortRollback(sqlite3_errstr(SQLITE_ABORT_ROLLBACK));
 
@@ -273,7 +272,7 @@ sqlite3pp::throwException(int errorCode)
 
 		case SQLITE_WARNING_AUTOINDEX:
 			throw exceptions::extended::SqliteWarningAutoindex(sqlite3_errstr(SQLITE_WARNING_AUTOINDEX));
-		
+
 		default:
 			return errorCode;
 	}
@@ -524,100 +523,9 @@ sqlite3pp::throwException(const int errorCode, sqlite3 *db)
 
 		case SQLITE_WARNING_AUTOINDEX:
 			throw exceptions::extended::SqliteWarningAutoindex(sqlite3_errmsg(db));
-		
+
 		default:
 			return errorCode;
 	}
-}
-
-
-int
-sqlite3pp::functions::sqlite3pp_open(const char *filename, sqlite3 **ppDb)
-{
-	return throwException(sqlite3_open(filename, ppDb), *ppDb);
-}
-
-
-int 
-sqlite3pp::functions::sqlite3pp_close(sqlite3 *db)
-{
-	return throwException(sqlite3_close(db), db);
-}
-
-
-int 
-sqlite3pp::functions::sqlite3pp_exec(sqlite3 *db, const char *sql, int (*callback)(void*, int, char**, char**), void *firstCallbackArgument, char **errmsg)
-{
-	return throwException(sqlite3_exec(db, sql, callback, firstCallbackArgument, errmsg), db);
-}
-
-
-int
-sqlite3pp::functions::sqlite3pp_prepare_v2(sqlite3* db, const char* zSql, int nByte, sqlite3_stmt** ppStmt, const char** pzTail)
-{
-	return throwException(sqlite3_prepare_v2(db, zSql, nByte, ppStmt, pzTail), db);
-}
-
-
-int
-sqlite3pp::functions::sqlite3pp_bind_text(sqlite3_stmt* ppStmt, int paramIndex, const char* value, int valueBytes, void(*valueDestructor)(void*))
-{
-	return throwException(sqlite3_bind_text(ppStmt, paramIndex, value, valueBytes, valueDestructor));
-}
-
-
-int
-sqlite3pp::functions::sqlite3pp_bind_int(sqlite3_stmt* ppStmt, int paramIndex, int value)
-{
-	return throwException(sqlite3_bind_int(ppStmt, paramIndex, value));
-}
-
-
-int
-sqlite3pp::functions::sqlite3pp_step(sqlite3_stmt* ppStmt)
-{
-	return throwException(sqlite3_step(ppStmt));
-}
-
-
-int
-sqlite3pp::functions::sqlite3pp_bind_int64(sqlite3_stmt* ppStmt, int paramIndex, sqlite3_int64 value)
-{
-	return throwException(sqlite3_bind_int64(ppStmt, paramIndex, value));
-}
-
-
-sqlite3_int64
-sqlite3pp::functions::sqlite3pp_column_int64(sqlite3_stmt* ppStmt, int iCol, sqlite3 *db)
-{
-	sqlite3_int64 r = sqlite3_column_int64(ppStmt, iCol);
-	
-	if ((r == 0) && (sqlite3_errcode(db) == SQLITE_NOMEM))
-		throwException(SQLITE_NOMEM);
-	
-	return r;
-}
-
-
-int
-sqlite3pp::functions::sqlite3pp_column_int(sqlite3_stmt* ppStmt, int iCol, sqlite3 *db)
-{
-	sqlite3_int64 r = sqlite3_column_int(ppStmt, iCol);
-	
-	if ((r == 0) && (sqlite3_errcode(db) == SQLITE_NOMEM))
-		throwException(SQLITE_NOMEM);
-	
-	return r;
-}
-
-const unsigned char*
-sqlite3pp::functions::sqlite3pp_column_text(sqlite3_stmt* ppStmt, int iCol, sqlite3 *db)
-{
-	const unsigned char *r = sqlite3_column_text(ppStmt, iCol);
-	
-	if ((r == NULL) && (sqlite3_errcode(db) == SQLITE_NOMEM))
-		throwException(SQLITE_NOMEM);
-	
-	return r;
 }
 

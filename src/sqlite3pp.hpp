@@ -23,6 +23,7 @@
 
 
 # include <string>
+# include <vector>
 # include <stdexcept>
 
 # include <sqlite3.h>
@@ -536,6 +537,62 @@ namespace sqlite3pp
 		int sqlite3pp_column_int(sqlite3_stmt* ppStmt, int iCol, sqlite3* db);
 		const unsigned char *sqlite3pp_column_text(sqlite3_stmt* ppStmt, int iCol, sqlite3* db);
 	}
+
+
+	namespace objects
+	{
+		using std::string;
+		using std::vector;
+		
+
+		class DbItem
+		{
+			public:
+							DbItem(sqlite3* db);
+				sqlite3*	getParentDb() const;
+
+			private:
+				sqlite3		*__db;
+		};
+
+
+		class Table: public DbItem
+		{
+			public:
+									Table(sqlite3 *db, const string tableName);
+
+			string 					getTableName() const;
+			vector<sqlite3_int64>	getIdList(string orderBy="", bool ascending=false) const; // Aggiungere nome colonna id?
+			bool					isValidId(const sqlite3_int64 id) const;
+
+			virtual void 			remove(const sqlite3_int64 id);
+
+
+			private:
+				const string		__tableName;
+		};
+
+
+		class Row: public DbItem
+		{
+			public:
+				Row(sqlite3 *db, const string tableName, const sqlite3_int64 id);
+
+				string 					getParentTableName() const;
+				sqlite3_int64			getId() const;
+
+				// TODO Generalizzare gestione memoria allocata dinamicamente (non è detto che siano tutte stringhe)
+				template <typename R> R getColumn(const string columnName, R (*sqlite3ppfunc) (sqlite3_stmt* ppStmt, int iCol, sqlite3* db), bool isString=false) const;
+				sqlite3_stmt*			getSelectStatement(const string columnName) const;
+				// Sqlite3 bind sul parametro 1 con il valore
+				sqlite3_stmt*			getUpdateStatement(const string columnName) const;
+
+			private:
+				const string			__tableName;
+				const sqlite3_int64		__id;
+		};
+	}
+
 
 	// Utilizza sqlite3_extended_errcode() e sqlite3_errmsg()
 	int throwException(sqlite3 *db);
