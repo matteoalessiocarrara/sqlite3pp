@@ -594,13 +594,14 @@ namespace sqlite3pp
 		};
 	}
 
+	using std::string;
 
 	// Utilizza sqlite3_extended_errcode() e sqlite3_errmsg()
-	int throwException(sqlite3 *db);
+	int throwException(sqlite3 *db, string sql="");
 	// Usa sqlite3_errstr() per il messaggio di errore
-	int throwException(int errorCode);
+	int throwException(int errorCode, string sql="");
 	// Usa sqlite3_errmsg() per il messaggio di errore
-	int throwException(int errorCode, sqlite3 *db);
+	int throwException(int errorCode, sqlite3 *db, string sql="");
 }
 
 
