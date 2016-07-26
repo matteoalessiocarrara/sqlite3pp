@@ -20,6 +20,7 @@
 
 # include "sqlite3pp.hpp"
 
+// XXX Eccezioni brutte, mettere sql dopo errore
 
 int
 sqlite3pp::throwException(sqlite3* db, string sql)
