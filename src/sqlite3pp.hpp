@@ -25,6 +25,7 @@
 # include <string>
 # include <vector>
 # include <stdexcept>
+# include <cstring>
 
 # include <sqlite3.h>
 
@@ -602,5 +603,39 @@ namespace sqlite3pp
 	int throwException(int errorCode, sqlite3 *db);
 }
 
+
+// I template devono stare nell'header, altrimenti non funzionano quando usata come libreria condivisa
+
+
+template <typename R> R
+sqlite3pp::objects::Row::getColumn(const string columnName, R (*sqlite3ppfunc) (sqlite3_stmt* ppStmt, int iCol, sqlite3* db), bool isString) const
+{
+	using std::strlen;
+	using std::strcpy;
+	using std::malloc;
+
+	sqlite3_stmt *ppStmt = getSelectStatement(columnName);
+	R ret;
+	
+	if (::sqlite3pp::functions::sqlite3pp_step(ppStmt) == SQLITE_ROW)
+	{
+		ret = sqlite3ppfunc(ppStmt, 0, getParentDb());
+		
+		// XXX Fatto a cavolo
+		if (isString)
+		{
+			ret = (R)malloc(strlen((char*)ret) + 1);
+			strcpy((char*)ret, (char*)ret);
+		}
+	}
+	else
+		throw std::runtime_error("Impossibile ottenere la colonna '" + columnName +"'");
+
+	// ATTENZIONE: I puntatori ottenuti con sqlite3ppfunc() non saranno
+	// più validi dopo questa funzione, quindi i dati devono essere copiati prima
+	sqlite3_finalize(ppStmt);
+
+	return ret;
+}
 
 # endif // ifndef SQLITE3PP_SQLITE3PP_HPP

@@ -129,34 +129,6 @@ Row::getId() const
 }
 
 
-template <typename R> R
-Row::getColumn(const string columnName, R (*sqlite3ppfunc) (sqlite3_stmt* ppStmt, int iCol, sqlite3* db), bool isString) const
-{
-	sqlite3_stmt *ppStmt = getSelectStatement(columnName);
-	R ret;
-	
-	if (::sqlite3pp::functions::sqlite3pp_step(ppStmt) == SQLITE_ROW)
-	{
-		ret = sqlite3ppfunc(ppStmt, 0, getParentDb());
-		
-		// XXX Fatto a cavolo
-		if (isString)
-		{
-			ret = (R)malloc(strlen((char*)ret) + 1);
-			strcpy((char*)ret, (char*)ret);
-		}
-	}
-	else
-		throw std::runtime_error("Impossibile ottenere la colonna '" + columnName +"'");
-
-	// ATTENZIONE: I puntatori ottenuti con sqlite3ppfunc() non saranno
-	// più validi dopo questa funzione, quindi i dati devono essere copiati prima
-	sqlite3_finalize(ppStmt);
-
-	return ret;
-}
-
-
 sqlite3_stmt *
 Row::getSelectStatement(const string columnName) const
 {
