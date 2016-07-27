@@ -620,7 +620,7 @@ sqlite3pp::objects::Row::getColumn(const string columnName, R (*sqlite3ppfunc) (
 	
 	if (::sqlite3pp::functions::sqlite3pp_step(ppStmt) == SQLITE_ROW)
 	{
-		tmp = sqlite3ppfunc(ppStmt, 0, getParentDb());
+		ret = tmp = sqlite3ppfunc(ppStmt, 0, getParentDb());
 		
 		// XXX Fatto a cavolo
 		if (isString)
