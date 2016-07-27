@@ -616,17 +616,17 @@ sqlite3pp::objects::Row::getColumn(const string columnName, R (*sqlite3ppfunc) (
 	using std::malloc;
 
 	sqlite3_stmt *ppStmt = getSelectStatement(columnName);
-	R ret;
+	R ret, tmp;
 	
 	if (::sqlite3pp::functions::sqlite3pp_step(ppStmt) == SQLITE_ROW)
 	{
-		ret = sqlite3ppfunc(ppStmt, 0, getParentDb());
+		tmp = sqlite3ppfunc(ppStmt, 0, getParentDb());
 		
 		// XXX Fatto a cavolo
 		if (isString)
 		{
-			ret = (R)malloc(strlen((char*)ret) + 1);
-			strcpy((char*)ret, (char*)ret);
+			ret = (R)malloc(strlen((char*)tmp) + 1);
+			strcpy((char*)ret, (char*)tmp);
 		}
 	}
 	else
