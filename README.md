@@ -1,4 +1,4 @@
-# ACHTUNG: SOFTWARE IN COSTRUZIONE
+# Attenzione: lavori in corso
 
 
 Questo è un wrapper per sqlite3 in c++. L'obbiettivo attualmente è sostituire gli 
