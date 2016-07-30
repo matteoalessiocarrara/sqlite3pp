@@ -1,8 +1,17 @@
 # ACHTUNG: SOFTWARE IN COSTRUZIONE
 
-Questo repository contiene software altamente infiammabile e mal documentato, potrebbe causare epilessia nei soggetti predisposti. Consultare un dottore prima dell'uso.  
 
-__Uno straccio di documentazione potrebbe essere nel file [README.tmp.md](README.tmp.md), se mi sono ricordato di crearlo.__
+Questo è un wrapper per sqlite3 in c++. L'obbiettivo attualmente è sostituire gli 
+errori (return) con le eccezioni.
 
-I deboli di cuore possono comunque ricevere aggiornamenti su [telegram](https://telegram.me/matteoalessiocarrara) o sulla comoda pagina [facebook](https://www.facebook.com/matteoalessiocarrara). Servizio in abbonamento 100€/settimana, leggere attentamente il foglietto illustrativo.
+In c, quando si verifica un errore in una funzione sta al programmatore controllare 
+il return ed eventualmente terminare il programma. In c++ invece quando si verifica 
+un errore viene sollevata un eccezione e il programma si blocca da se, se non è 
+gestita.
+
+
+## Aggiornamenti
+
+È possibile iscriversi al canale [telegram](https://telegram.me/matteoalessiocarrara) 
+od alla comoda pagina [facebook](https://www.facebook.com/matteoalessiocarrara).
 
