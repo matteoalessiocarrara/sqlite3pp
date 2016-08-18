@@ -16,6 +16,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA 02110-1301, USA.
  */
+
+# include <stdexcept>
 # include <sqlite3.h>
 
 # include "sqlite3pp.hpp"
@@ -113,4 +115,24 @@ functions::sqlite3pp_column_text(sqlite3_stmt* ppStmt, int iCol, sqlite3 *db)
 
 	return r;
 }
+
+
+sqlite3_int64
+sqlite3pp_last_insert_rowid(sqlite3 *db)
+{
+
+	sqlite3_int64 id = sqlite3_last_insert_rowid(db);
+
+	if (id == 0)
+		throw std::runtime_error("Id dell'ultimo oggetto inserito non trovato");
+
+	return id;
+}
+
+
+
+
+
+
+
 

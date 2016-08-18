@@ -537,6 +537,7 @@ namespace sqlite3pp
 		sqlite3_int64 sqlite3pp_column_int64(sqlite3_stmt* ppStmt, int iCol, sqlite3* db);
 		int sqlite3pp_column_int(sqlite3_stmt* ppStmt, int iCol, sqlite3* db);
 		const unsigned char *sqlite3pp_column_text(sqlite3_stmt* ppStmt, int iCol, sqlite3* db);
+		sqlite3_int64 sqlite3pp_last_insert_rowid(sqlite3 *db);
 	}
 
 
