@@ -158,3 +158,24 @@ Row::getUpdateStatement(const string columnName) const
 
 	return ppStmt;
 }
+
+
+unsigned char *
+Row::getColumnString(const string columnName) const
+{
+	sqlite3_stmt *ppStmt = getSelectStatement(columnName);
+	unsigned char *ret, *tmp;
+
+	if (::sqlite3pp::functions::sqlite3pp_step(ppStmt) == SQLITE_ROW)
+	{
+		tmp = (unsigned char*)::sqlite3pp::functions::sqlite3pp_column_text(ppStmt, 0, getParentDb());
+		ret = (unsigned char*)malloc(strlen((char*)tmp) + 1);
+		strcpy((char*)ret, (char*)tmp);
+	}
+	else
+		throw std::runtime_error("Impossibile ottenere la colonna '" + columnName +"'");
+
+	sqlite3_finalize(ppStmt);
+
+	return ret;
+}

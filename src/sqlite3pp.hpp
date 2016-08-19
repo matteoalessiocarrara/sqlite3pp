@@ -583,8 +583,8 @@ namespace sqlite3pp
 				string 					getParentTableName() const;
 				sqlite3_int64			getId() const;
 
-				// TODO Generalizzare gestione memoria allocata dinamicamente (non è detto che siano tutte stringhe)
-				template <typename R> R getColumn(const string columnName, R (*sqlite3ppfunc) (sqlite3_stmt* ppStmt, int iCol, sqlite3* db), bool isString=false) const;
+				template <typename R> R getColumn(const string columnName, R (*sqlite3ppfunc) (sqlite3_stmt* ppStmt, int iCol, sqlite3* db)) const;
+				unsigned char *getColumnString(const string columnName) const;
 				sqlite3_stmt*			getSelectStatement(const string columnName) const;
 				// Sqlite3 bind sul parametro 1 con il valore
 				sqlite3_stmt*			getUpdateStatement(const string columnName) const;
@@ -610,34 +610,22 @@ namespace sqlite3pp
 
 
 template <typename R> R
-sqlite3pp::objects::Row::getColumn(const string columnName, R (*sqlite3ppfunc) (sqlite3_stmt* ppStmt, int iCol, sqlite3* db), bool isString) const
+sqlite3pp::objects::Row::getColumn(const string columnName, R (*sqlite3ppfunc) (sqlite3_stmt* ppStmt, int iCol, sqlite3* db)) const
 {
-	using std::strlen;
-	using std::strcpy;
-	using std::malloc;
-
 	sqlite3_stmt *ppStmt = getSelectStatement(columnName);
-	R ret, tmp;
+	R ret;
 	
 	if (::sqlite3pp::functions::sqlite3pp_step(ppStmt) == SQLITE_ROW)
-	{
-		ret = tmp = sqlite3ppfunc(ppStmt, 0, getParentDb());
-		
-		// XXX Fatto a cavolo
-		if (isString)
-		{
-			ret = (R)malloc(strlen((char*)tmp) + 1);
-			strcpy((char*)ret, (char*)tmp);
-		}
-	}
+		ret = sqlite3ppfunc(ppStmt, 0, getParentDb());
 	else
 		throw std::runtime_error("Impossibile ottenere la colonna '" + columnName +"'");
 
-	// ATTENZIONE: I puntatori ottenuti con sqlite3ppfunc() non saranno
-	// più validi dopo questa funzione, quindi i dati devono essere copiati prima
 	sqlite3_finalize(ppStmt);
 
 	return ret;
 }
+
+
+
 
 # endif // ifndef SQLITE3PP_SQLITE3PP_HPP
