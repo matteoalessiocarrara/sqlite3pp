@@ -118,7 +118,7 @@ functions::sqlite3pp_column_text(sqlite3_stmt* ppStmt, int iCol, sqlite3 *db)
 
 
 sqlite3_int64
-sqlite3pp_last_insert_rowid(sqlite3 *db)
+functions::sqlite3pp_last_insert_rowid(sqlite3 *db)
 {
 
 	sqlite3_int64 id = sqlite3_last_insert_rowid(db);
