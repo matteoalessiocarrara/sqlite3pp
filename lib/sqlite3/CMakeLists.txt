@@ -76,16 +76,21 @@ endif()
 if (SQLITE_BUILD_STATIC)
     # build static library
     add_library(${SQLITE_STATIC_NAME} STATIC ${SRC_LIB_FILE})
+	target_link_libraries(${SQLITE_STATIC_NAME} ${CMAKE_THREAD_LIBS_INIT} ${CMAKE_DL_LIBS})
 endif()
 
 if (SQLITE_BUILD_SHARED)
     # build dynamic library
     add_library(${SQLITE_DYN_NAME} SHARED ${SRC_LIB_FILE})
-    if (SQLITE_WIN_BUILD)
+	target_link_libraries(${SQLITE_DYN_NAME} ${CMAKE_THREAD_LIBS_INIT} ${CMAKE_DL_LIBS})
+
+	if (SQLITE_WIN_BUILD)
         #then we do dll library, so need to export api
         set_target_properties(${SQLITE_DYN_NAME} PROPERTIES DEFINE_SYMBOL "SQLITE_API=__declspec(dllexport)")
     endif()
 endif()
+
+
 
 # build shell executable
 add_executable(shell ${SRC_SHELL_FILE})
