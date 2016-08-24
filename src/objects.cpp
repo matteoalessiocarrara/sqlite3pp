@@ -16,10 +16,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA 02110-1301, USA.
  */
-# include <sqlite3.h>
+
 # include <string>
 # include <vector>
 # include <cstring>
+
+# include "../lib/sqlite3/src/sqlite3.h"
 
 # include "sqlite3pp.hpp"
 

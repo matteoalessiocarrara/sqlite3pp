@@ -27,7 +27,7 @@
 # include <stdexcept>
 # include <cstring>
 
-# include <sqlite3.h>
+# include "../lib/sqlite3/src/sqlite3.h"
 
 
 // TODO copiare documentazione?
