@@ -20,6 +20,7 @@
 # include <string>
 # include <vector>
 # include <cstring>
+# include <cstdlib>
 
 # include "../lib/sqlite3/src/sqlite3.h"
 
