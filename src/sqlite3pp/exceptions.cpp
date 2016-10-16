@@ -17,7 +17,7 @@
  * MA 02110-1301, USA.
  */
 
-# include "../lib/sqlite3/src/sqlite3.h"
+# include "../sqlite3/src/sqlite3.h"
 
 # include "sqlite3pp.hpp"
 

@@ -19,7 +19,7 @@
 
 # include <stdexcept>
 
-# include "../lib/sqlite3/src/sqlite3.h"
+# include "../sqlite3/src/sqlite3.h"
 
 # include "sqlite3pp.hpp"
 
